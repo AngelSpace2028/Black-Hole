@@ -1,6 +1,6 @@
 import os
 import math
-import paq  # Make sure you have a paq library or adjust if needed
+import paq  # Make sure you have a paq library or replace with zlib if needed
 
 # Find a divisor
 def find_divisor(n):
@@ -30,12 +30,10 @@ def transform_with_pattern(data, chunk_size=4):
 
 # Fake quantum encoding (simple number adjustment instead of real quantum logic)
 def fake_quantum_encode(number):
-    # Just a dummy function to simulate 'quantum encoding'
-    return number ^ 0xAAAAAAAA  # Simple XOR with a pattern
+    return number ^ 0xAAAAAAAA  # XOR with a pattern
 
 def fake_quantum_decode(encoded_number):
-    # Reverse the 'quantum' encoding
-    return encoded_number ^ 0xAAAAAAAA  # Same XOR pattern reverses
+    return encoded_number ^ 0xAAAAAAAA
 
 # Compress using PAQ
 def compress_with_paq(input_file, output_file):
@@ -74,14 +72,10 @@ def encode():
         size = len(transformed_data)
         p = find_divisor(size)
         q = size // p
-        a = p + 1
-        b = q + 1
 
-        # Write metadata: P, Q, A, B
+        # Write only P and Q
         write_4byte_int(f, p)
         write_4byte_int(f, q)
-        write_4byte_int(f, a)
-        write_4byte_int(f, b)
 
         # Fake "quantum" encode the size
         encoded_size = fake_quantum_encode(size)
@@ -111,8 +105,6 @@ def decode():
     with open(temp_file, 'rb') as f:
         p = read_4byte_int(f)
         q = read_4byte_int(f)
-        a = read_4byte_int(f)
-        b = read_4byte_int(f)
         encoded_size = read_4byte_int(f)
         size = fake_quantum_decode(encoded_size)
 
