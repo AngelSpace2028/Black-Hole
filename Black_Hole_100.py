@@ -23,8 +23,6 @@ def transform_with_pattern(data, chunk_size=4):
     transformed = bytearray()
     for i in range(0, len(data), chunk_size):
         chunk = data[i:i+chunk_size]
-        if len(chunk) < chunk_size:
-            chunk = chunk.ljust(chunk_size, b'\x00')
         transformed.extend([b ^ 0xFF for b in chunk])
     return transformed
 
@@ -71,9 +69,14 @@ def encode():
     with open(temp_file, 'wb') as f:
         size = len(transformed_data)
         p = find_divisor(size)
+        
+        # If size is prime, divide by 2 (rounding down)
+        if p == size:
+            p = size // 2
+
         q = size // p
 
-        # Write only P and Q
+        # Write P and Q
         write_4byte_int(f, p)
         write_4byte_int(f, q)
 
