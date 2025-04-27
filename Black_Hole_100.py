@@ -35,7 +35,7 @@ def read_4byte_int(f):
 def transform_with_pattern(data, chunk_size=4):
     transformed = bytearray()
     for i in range(0, len(data), chunk_size):
-        chunk = data[i:i+chunk_size]
+        chunk = data[i:i + chunk_size]
         transformed.extend([b ^ 0xFF for b in chunk])
     return transformed
 
@@ -68,7 +68,7 @@ def encode():
     input_file = input("Enter input file: ").strip()
     output_base = input("Enter output base name (without .paq): ").strip()
     output_paq = output_base + ".paq"
-
+    
     if not os.path.isfile(input_file):
         print("File does not exist.")
         return
@@ -85,14 +85,13 @@ def encode():
         p = find_divisor(size)
         q = size // p
 
-        # Special rule: if p and q are both prime, keep them
-        if is_prime(p) and is_prime(q):
-            pass  # keep p and q
+        # Special rule: if p is greater than 2, prepend 00000000, else prepend 00000001
+        if is_prime(p) and p > 2:
+            # Prepend 00000000 byte
+            f.write(bytes([0x00]))
         else:
-            # if not, and size is prime, split into p = size // 2
-            if p == size:
-                p = size // 2
-                q = size - p  # in case size is odd
+            # Prepend 00000001 byte
+            f.write(bytes([0x01]))
 
         # Write p and q
         write_4byte_int(f, p)
@@ -124,6 +123,18 @@ def decode():
     decompress_with_paq(input_paq, temp_file)
 
     with open(temp_file, 'rb') as f:
+        # Read the prepended byte
+        prepend_byte = f.read(1)
+        if prepend_byte == b'\x00':
+            # Means p > 2
+            pass
+        elif prepend_byte == b'\x01':
+            # Means p == 2
+            pass
+        else:
+            print("Unexpected prepend byte.")
+            return
+        
         p = read_4byte_int(f)
         q = read_4byte_int(f)
         encoded_size = read_4byte_int(f)
@@ -146,6 +157,7 @@ if __name__ == "__main__":
     print("1 - Encode file")
     print("2 - Decode file")
     choice = input("Enter 1 or 2: ").strip()
+
     if choice == '1':
         encode()
     elif choice == '2':
