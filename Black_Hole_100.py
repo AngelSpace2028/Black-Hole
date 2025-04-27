@@ -2,6 +2,19 @@ import os
 import math
 import paq  # Make sure you have a paq library or replace with zlib if needed
 
+# Check if a number is prime
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(math.isqrt(n)) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+
 # Find a divisor
 def find_divisor(n):
     if n % 2 == 0:
@@ -9,7 +22,7 @@ def find_divisor(n):
     for i in range(3, int(math.isqrt(n)) + 1, 2):
         if n % i == 0:
             return i
-    return n
+    return n  # prime number
 
 # Write and read 4-byte integer
 def write_4byte_int(f, value):
@@ -68,15 +81,20 @@ def encode():
     temp_file = output_base + "_temp"
     with open(temp_file, 'wb') as f:
         size = len(transformed_data)
-        p = find_divisor(size)
-        
-        # If size is prime, divide by 2 (rounding down)
-        if p == size:
-            p = size // 2
 
+        p = find_divisor(size)
         q = size // p
 
-        # Write P and Q
+        # Special rule: if p and q are both prime, keep them
+        if is_prime(p) and is_prime(q):
+            pass  # keep p and q
+        else:
+            # if not, and size is prime, split into p = size // 2
+            if p == size:
+                p = size // 2
+                q = size - p  # in case size is odd
+
+        # Write p and q
         write_4byte_int(f, p)
         write_4byte_int(f, q)
 
