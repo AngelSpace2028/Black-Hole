@@ -43,7 +43,7 @@ def compress_with_paq(reversed_filename, compressed_filename, chunk_size, positi
     metadata += struct.pack(">I", len(positions))
     metadata += struct.pack(f">{len(positions)}I", *positions)
 
-    # ✅ KEEP full metadata (do not slice or corrupt)
+    # KEEP full metadata (do not slice or corrupt)
     # new_metadata_len = apply_minus_operation(len(metadata))
     # metadata = metadata[:new_metadata_len]  ← removed this
 
