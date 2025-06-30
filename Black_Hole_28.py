@@ -341,9 +341,9 @@ class compression:
 
     
 
-                                    k1=2
+                                    k1=-2
 
-                                    k2=3
+                                    k2=-1
 
                                     
 
@@ -472,7 +472,7 @@ class compression:
                                                         X4.append(N4)
                                             else:
                                                         #print("Maximum list size reached! Resetting...")
-                                                        X1=0  # Reset the list
+                                                        X1=X1 # Reset the list
                                                          # Reset the counter
                                             
                                                     # Print the updated values of X1 and the size of X4
@@ -838,9 +838,9 @@ class compression:
 
           
 
-                                    k1=2
+                                    k1=-2
 
-                                    k2=3
+                                    k2=-1
 
                                     
 
@@ -967,7 +967,7 @@ class compression:
                                                         X4.append(N4)
                                             else:
                                                         #print("Maximum list size reached! Resetting...")
-                                                        X1=0 # Reset the list
+                                                        X1=X1 # Reset the list
                                                          # Reset the counter
                                             
                                                     # Print the updated values of X1 and the size of X4
